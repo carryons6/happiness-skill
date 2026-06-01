@@ -38,7 +38,16 @@ The answers are used to decide which modules should be agent-owned, co-created, 
 
 ## Install
 
-From this repository root:
+Recommended: install it through Codex with the built-in skill installer.
+
+```text
+Use $skill-installer to install the skill from https://github.com/carryons6/happiness-skill.
+Use path "." and install it as "happiness".
+```
+
+Then restart Codex so it can discover the new skill.
+
+CLI equivalent:
 
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
@@ -47,9 +56,7 @@ python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-githu
   --name happiness
 ```
 
-Then restart Codex so it can discover the new skill.
-
-Manual install is also possible:
+Manual fallback:
 
 ```bash
 mkdir -p ~/.codex/skills

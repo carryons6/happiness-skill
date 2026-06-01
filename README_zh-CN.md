@@ -38,7 +38,16 @@ Happiness 是一个面向 AI 辅助科研编程的 Codex skill。它的目标是
 
 ## 安装
 
-从这个仓库根目录安装：
+推荐方式：在 Codex 里使用内置的 skill installer 安装。
+
+```text
+Use $skill-installer to install the skill from https://github.com/carryons6/happiness-skill.
+Use path "." and install it as "happiness".
+```
+
+安装后重启 Codex，让它重新发现这个 skill。
+
+等价的命令行方式：
 
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
@@ -47,9 +56,7 @@ python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-githu
   --name happiness
 ```
 
-安装后重启 Codex，让它重新发现这个 skill。
-
-也可以手动安装：
+手动安装 fallback：
 
 ```bash
 mkdir -p ~/.codex/skills
