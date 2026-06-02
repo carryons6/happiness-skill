@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
 #
-# Happiness skill installer for Codex (macOS / Linux)
+# Research Guardrail skill installer for Codex (macOS / Linux)
 #
-#   curl -fsSL https://raw.githubusercontent.com/carryons6/happiness-skill/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/carryons6/research-guardrail-skill/main/install.sh | bash
 #
-# Installs the skill into  $CODEX_HOME/skills/happiness  (default ~/.codex/skills/happiness).
+# Installs the skill into  $CODEX_HOME/skills/research-guardrail  (default ~/.codex/skills/research-guardrail).
 # Re-running updates an existing install. Environment overrides:
 #   CODEX_HOME            Codex home dir            (default: ~/.codex)
-#   HAPPINESS_REF         branch or tag to install  (default: main)
-#   HAPPINESS_REPO_URL    git clone URL
-#   HAPPINESS_REPO_TARBALL  tarball URL used when git is unavailable
+#   RESEARCH_GUARDRAIL_REF         branch or tag to install  (default: main)
+#   RESEARCH_GUARDRAIL_REPO_URL    git clone URL
+#   RESEARCH_GUARDRAIL_REPO_TARBALL  tarball URL used when git is unavailable
 #
 set -euo pipefail
 
-SKILL_NAME="happiness"
-REF="${HAPPINESS_REF:-main}"
-REPO_URL="${HAPPINESS_REPO_URL:-https://github.com/carryons6/happiness-skill.git}"
-REPO_TARBALL="${HAPPINESS_REPO_TARBALL:-https://github.com/carryons6/happiness-skill/archive/refs/heads/${REF}.tar.gz}"
+SKILL_NAME="research-guardrail"
+REF="${RESEARCH_GUARDRAIL_REF:-main}"
+REPO_URL="${RESEARCH_GUARDRAIL_REPO_URL:-https://github.com/carryons6/research-guardrail-skill.git}"
+REPO_TARBALL="${RESEARCH_GUARDRAIL_REPO_TARBALL:-https://github.com/carryons6/research-guardrail-skill/archive/refs/heads/${REF}.tar.gz}"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 SKILLS_DIR="$CODEX_HOME/skills"
 TARGET_DIR="$SKILLS_DIR/$SKILL_NAME"
@@ -51,14 +51,14 @@ else
   tmp="$(mktemp -d)"
   trap 'rm -rf "$tmp"' EXIT
   if command -v curl >/dev/null 2>&1; then
-    curl -fsSL "$REPO_TARBALL" -o "$tmp/happiness.tar.gz"
+    curl -fsSL "$REPO_TARBALL" -o "$tmp/research-guardrail.tar.gz"
   elif command -v wget >/dev/null 2>&1; then
-    wget -qO "$tmp/happiness.tar.gz" "$REPO_TARBALL"
+    wget -qO "$tmp/research-guardrail.tar.gz" "$REPO_TARBALL"
   else
     err "Need curl or wget to download the skill."
   fi
   mkdir -p "$TARGET_DIR"
-  tar -xzf "$tmp/happiness.tar.gz" -C "$TARGET_DIR" --strip-components=1
+  tar -xzf "$tmp/research-guardrail.tar.gz" -C "$TARGET_DIR" --strip-components=1
 fi
 
 [ -f "$TARGET_DIR/SKILL.md" ] || err "Install finished but $TARGET_DIR/SKILL.md is missing; something went wrong."

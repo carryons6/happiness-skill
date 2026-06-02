@@ -1,15 +1,15 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "happiness",
-  "displayName": "Happiness",
-  "version": "0.0.4",
+  "name": "research-guardrail",
+  "displayName": "Research Guardrail",
+  "version": "0.0.5",
   "description": "Research-agency guardrail for AI-assisted research and data/scientific coding. Classifies each module by learning value and correctness risk, automates the safe parts, and attaches a verification gate to silently-wrong code (units, index/axis conventions, data joins, normalization, time handling).",
   "author": {
     "name": "carryons6",
     "url": "https://github.com/carryons6"
   },
-  "homepage": "https://github.com/carryons6/happiness-skill",
-  "repository": "https://github.com/carryons6/happiness-skill",
+  "homepage": "https://github.com/carryons6/research-guardrail-skill",
+  "repository": "https://github.com/carryons6/research-guardrail-skill",
   "license": "MIT",
   "keywords": [
     "research",

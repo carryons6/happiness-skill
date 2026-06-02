@@ -1,12 +1,12 @@
 {
-  "name": "happiness-skill",
+  "name": "research-guardrail-skill",
   "owner": {
     "name": "carryons6"
   },
-  "description": "Marketplace hosting the Happiness research-agency skill.",
+  "description": "Marketplace hosting the Research Guardrail skill.",
   "plugins": [
     {
-      "name": "happiness",
+      "name": "research-guardrail",
       "source": "./",
       "description": "Research-agency guardrail for AI-assisted research and data/scientific coding.",
       "category": "research",

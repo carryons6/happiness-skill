@@ -1,9 +1,9 @@
-# Happiness Skill
+# Research Guardrail Skill
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-D97757)](https://claude.com/claude-code)
 [![Codex](https://img.shields.io/badge/Codex-skill-412991)](https://openai.com/codex)
 
-Happiness is a skill for AI-assisted research coding. It helps researchers use coding agents without losing the parts of the work that create understanding, judgment, and ownership — and without letting plausible-looking code silently poison a scientific result.
+Research Guardrail is a skill for AI-assisted research coding. It helps researchers use coding agents without losing the parts of the work that create understanding, judgment, and ownership — and without letting plausible-looking code silently poison a scientific result.
 
 It applies across research and data/scientific coding — machine learning, data analysis, simulations, statistics, computational science, and beyond.
 
@@ -16,58 +16,58 @@ It applies across research and data/scientific coding — machine learning, data
 **As a plugin (recommended)** — the repo ships a plugin marketplace, so you can install it with `/plugin`:
 
 ```text
-/plugin marketplace add carryons6/happiness-skill
-/plugin install happiness@happiness-skill
+/plugin marketplace add carryons6/research-guardrail-skill
+/plugin install research-guardrail@research-guardrail-skill
 ```
 
 **As a personal skill** — clone into your skills directory:
 
 ```bash
-git clone https://github.com/carryons6/happiness-skill.git ~/.claude/skills/happiness
+git clone https://github.com/carryons6/research-guardrail-skill.git ~/.claude/skills/research-guardrail
 ```
 
-Or use it as a project skill by placing it under `.claude/skills/happiness/` in your repository. Claude Code discovers the skill automatically from the `SKILL.md` frontmatter.
+Or use it as a project skill by placing it under `.claude/skills/research-guardrail/` in your repository. Claude Code discovers the skill automatically from the `SKILL.md` frontmatter.
 
 ### Codex
 
-**Quick install (recommended)** — one line; installs into `~/.codex/skills/happiness`. Re-run it later to update.
+**Quick install (recommended)** — one line; installs into `~/.codex/skills/research-guardrail`. Re-run it later to update.
 
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/carryons6/happiness-skill/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/carryons6/research-guardrail-skill/main/install.sh | bash
 ```
 
 Windows (PowerShell):
 
 ```powershell
-iwr -useb https://raw.githubusercontent.com/carryons6/happiness-skill/main/install.ps1 | iex
+iwr -useb https://raw.githubusercontent.com/carryons6/research-guardrail-skill/main/install.ps1 | iex
 ```
 
-Then restart Codex so it can discover the skill. The scripts honor `CODEX_HOME` and `HAPPINESS_REF` (branch/tag) if you need to override them.
+Then restart Codex so it can discover the skill. The scripts honor `CODEX_HOME` and `RESEARCH_GUARDRAIL_REF` (branch/tag) if you need to override them.
 
 **Other methods**
 
 Built-in skill installer:
 
 ```text
-Use $skill-installer to install the skill from https://github.com/carryons6/happiness-skill.
-Use path "." and install it as "happiness".
+Use $skill-installer to install the skill from https://github.com/carryons6/research-guardrail-skill.
+Use path "." and install it as "research-guardrail".
 ```
 
 Manual clone:
 
 ```bash
 mkdir -p ~/.codex/skills
-git clone https://github.com/carryons6/happiness-skill.git ~/.codex/skills/happiness
+git clone https://github.com/carryons6/research-guardrail-skill.git ~/.codex/skills/research-guardrail
 ```
 
 ## Triggering the Skill
 
 The skill is **explicit-invocation only** — it will not fire on its own, even when your task looks like paper reproduction, method development, or pipeline work. Invoke it by name when you want it:
 
-- **Claude Code**: run the `/happiness` slash command, or just ask in plain language, e.g. *"Use the happiness skill to plan how I should reproduce this paper."*
-- **Codex**: `$happiness`.
+- **Claude Code**: run the `/research-guardrail` slash command, or just ask in plain language, e.g. *"Use the research-guardrail skill to plan how I should reproduce this paper."*
+- **Codex**: `$research-guardrail`.
 
 On the first substantial task after you invoke it, the skill runs a short [calibration](#first-use-calibration) (3–5 questions) before it produces a plan.
 

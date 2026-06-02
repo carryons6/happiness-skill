@@ -1,94 +1,100 @@
 ---
-name: happiness
-description: Research-agency guardrail for AI-assisted research and data/scientific coding (machine learning, data analysis, simulations, statistics, computational science, and the like). It classifies work along two axes — learning value AND correctness risk — so low-value boilerplate gets automated, high-value mechanism stays manual, and the dangerous "looks-fine-but-silently-wrong" code (unit/scale mismatches, index and axis conventions, sign and ordering errors, data alignment and joins, normalization, time handling) always gets a verification gate. EXPLICIT INVOCATION ONLY — do NOT trigger this skill automatically or proactively. Apply it only when the user explicitly asks for it: by running the /happiness command, saying "$happiness", or naming the happiness skill (e.g. "use the happiness skill to ..."). Do not invoke it on your own even when the task looks like paper reproduction, new-method development, pipeline building, or a quick implementation that could corrupt a result.
+name: research-guardrail
+description: Guardrail for AI-assisted research and analytical/computational work in ANY field — data analysis, statistics, machine learning, simulations, modeling, quantitative finance, computational science, and similar. Two jobs: (1) preserve the researcher's understanding and ownership of the parts worth owning, and (2) — the bigger threat in data work — catch the "looks-fine-but-silently-wrong" code (unit/scale mismatches, index/axis conventions, sign and ordering errors, data joins and alignment, normalization, time/epoch handling, leakage) before it quietly corrupts a result. EXPLICIT INVOCATION ONLY — do NOT trigger this skill automatically or proactively. Apply it only when the user explicitly asks for it: by running the /research-guardrail command, saying "$research-guardrail", or naming the skill (e.g. "use the research-guardrail skill to ..."). Do not invoke it on your own even when the task looks like reproducing a result, new-method development, pipeline building, or a quick implementation that could corrupt a downstream conclusion.
 ---
 
-# Happiness
+# Research Guardrail
 
 ## Overview
 
-Use this skill to protect research understanding and researcher agency while still using coding agents effectively. The goal is **satisfying, trustworthy participation** — not anti-automation.
+Use this skill to keep AI-assisted research both **trustworthy** and **satisfying** — without turning into anti-automation friction. The goal is good participation, not maximal manual labor.
 
-**Invocation:** this skill is explicit-invocation only. Apply it when the user calls it by name (the `/happiness` command, `$happiness`, or asking to use the happiness skill) — not automatically, even when the task looks like paper reproduction, method development, or pipeline work.
+**Invocation:** this skill is explicit-invocation only. Apply it when the user calls it by name (the `/research-guardrail` command, `$research-guardrail`, or asking to use the skill) — not automatically, even when the task looks like reproduction, method development, or pipeline work.
 
-Two things ruin research happiness, and they are different:
-- **Lost understanding**: the agent did the interesting part, so the researcher never built the intuition.
-- **Lost trust**: the agent wrote plausible code that was silently wrong, and a conclusion got poisoned.
+Two different things ruin research, and they need different defenses:
 
-The original framing only guarded the first. In data and computational research the second is often the bigger threat, because the wrong code *runs*, *looks reasonable*, and *produces a number*.
+- **Lost trust** — the agent wrote plausible code that was silently wrong, and a conclusion got poisoned. In data and computational work this is usually the *bigger* threat, because the wrong code runs, looks reasonable, and produces a number. **Defend with verification gates.**
+- **Lost understanding** — the agent did the interesting part, so the researcher never built the intuition. **Defend by keeping the mechanism manual when it's worth owning.**
 
-Core principle: **classify every module on two axes before writing substantial code** — how much the researcher learns by owning it, and how much a silent error would cost. Automate freely only when both are low.
+This applies across fields. The silent-bug zones (units, indices, signs, joins, normalization, time, leakage) show up in astrophysics, genomics, finance, social science, and ML alike — only the specific conventions change.
 
-Note on the name: "happiness through participation" is a working assumption, not a law. Some researchers get satisfaction from understanding, others from shipping. Calibrate to the actual person (see below) rather than assuming participation is always what they want.
+A note on the underlying assumption: "satisfaction comes from participation" is a working heuristic, not a law. Some people get satisfaction from understanding, others from shipping. Calibrate to the actual person.
 
-## The two-axis grid
+## First: scale the response to the task
 
-Classify each module by **learning value** (does owning it build research intuition?) and **correctness risk** (would a silent bug here corrupt a result and survive review?).
+Before any process, decide how heavy to be. **Most requests want the lightweight path.**
 
-|  | **Low correctness risk** (trivial / loudly fails / easy to verify) | **High correctness risk** (silent bugs survive and pollute conclusions) |
+- **Quick / mechanical ask** (one transform, a plot, a fix, a small script): just do it. If it touches a silent-bug zone, **attach the one verification check** that would catch the error, and move on. No calibration, no table, no plan.
+- **Substantial work** (reproducing a result, a new method, a multi-stage pipeline, training a student): run the fuller workflow below — split into modules, place them on the grid, give a short plan, gate the risky parts.
+
+The verification gate is non-negotiable on either path. The *ceremony* (calibration, plans, tables) is only justified when the work is substantial enough that mapping it out pays for itself. Imposing the full ritual on a five-line request reads as condescension, not care.
+
+## The two axes
+
+Classify work along two axes. They are assessed differently:
+
+- **Correctness risk** — mostly objective, read it off the code. Would a silent bug here survive review and corrupt a result? High whenever the code touches units, indexing/coordinate conventions, signs/ordering, joins/alignment, normalization, time/epoch, numerical stability, or train/test leakage.
+- **Learning value** — calibrate to the person. Does *this* researcher build useful intuition by owning this? Depends on their role, prior exposure, and what they want to keep owning. You cannot read it off the code, so infer it from context or ask.
+
+|  | **Low correctness risk** | **High correctness risk** (silent bugs survive) |
 |---|---|---|
 | **High learning value** | **MANUAL CORE** — own it to understand | **MANUAL CORE + hard verification** — own it *and* prove it right |
-| **Low learning value** | **AGENT-OWNED** — automate freely | **AGENT-DRAFTED + VERIFICATION GATE** — let the agent write it, but never trust it blind |
+| **Low learning value** | **AGENT-OWNED** — automate freely | **AGENT-DRAFTED + VERIFICATION GATE** — let the agent write it, never trust it blind |
 
-The bottom-right cell is the one the original skill missed. You don't need to deeply *understand* an array reshape, a unit conversion, or a table join, but you must *verify* it, because getting it wrong silently corrupts every downstream value and you'll find out three figures later.
+The bottom-right cell is the easy one to miss. You don't need to deeply *understand* an array reshape, a unit conversion, or a table join — but you must *verify* it, because a silent error there corrupts every downstream value and you find out three figures later.
 
-**Co-created** still exists as a label for "agent broadens options, researcher chooses" — it usually lands in the top-right or bottom-right cells (design choices that are both somewhat instructive and consequential).
+(**Co-created** — "agent broadens the options, researcher chooses" — usually lands in the right column: choices that are both somewhat instructive and consequential.)
 
-## Default workflow
+## The verification gate (the core of this skill)
 
-When the user asks for help with paper reproduction, new-method development, pipeline building, or student training:
+Whenever code lands in the high-risk column, attach the check that would catch a silent error. A gate is a concrete, runnable assertion — not "be careful."
 
-1. If the capability boundary is unclear, run a brief calibration (below). Skip it for tiny mechanical tasks or when context already makes the answer obvious.
-2. Identify the context: reproduction, new method, pipeline engineering, or training.
+Common silent-bug zones and a gate for each:
+
+- **Units & scale** — mixed units, wrong scale factor or magnitude. *Gate:* assert a known quantity comes out in the expected unit and order of magnitude.
+- **Index & coordinate conventions** — 0- vs 1-indexed, row- vs column-major, inclusive vs exclusive ranges, axis order. *Gate:* round-trip a known element, or inject a known value at a known position and confirm where it lands.
+- **Sign, direction & ordering** — flipped sign, ascending vs descending, transposed array. *Gate:* run a tiny hand-computed case and compare element by element.
+- **Aggregation over the wrong axis** — reducing across the wrong dimension. *Gate:* check output shape plus a hand-verified aggregate on a small input.
+- **Joins, merges & alignment** — wrong key, dropped or duplicated rows, misaligned series. *Gate:* check row counts and match completeness/contamination against a clean subset.
+- **Normalization & weighting** — wrong constant, double counting, missing or mis-applied weights. *Gate:* recover a known calibrated value from known inputs.
+- **Time, timezone & epoch** — offset, reference shift, off-by-one in date math. *Gate:* convert a known timestamp both ways against an independent reference.
+- **Numerical stability** — precision, overflow/underflow, NaN propagation, order-dependent sums. *Gate:* compare against a higher-precision or analytic reference.
+- **Leakage & randomness** (ML / statistics) — train/test contamination, unfixed seeds, look-ahead bias. *Gate:* assert splits are disjoint and a fixed seed reproduces the result.
+
+**These are illustrative, not a checklist for one field.** The general move is the same everywhere: name the conventions and transforms where a *wrong assumption would survive review*, then gate those. Examples of field-specific conventions worth gating — a discipline's coordinate systems and calibration constants; an accounting sign convention or look-ahead/survivorship bias in finance; genomic coordinate offsets and strand orientation; a survey's weighting and missing-data codes; a schema's key and null rules. If you can't name a gate for risky code, **say so explicitly** — that itself is the warning.
+
+State the relevant gate inline when you deliver the code.
+
+## Workflow (substantial-work path)
+
+1. If the capability boundary is unclear, run a brief calibration (below). Skip it when context already makes the answer obvious, or the task is small.
+2. Identify the context: reproduction, new method, pipeline, or training.
 3. Split the work into modules.
-4. Place each module in the grid.
-5. Produce a short participation plan (template below) before writing full code.
+4. Place each module on the grid.
+5. Give a short participation plan (template below) before writing full code.
 6. Implement agent-owned parts fully.
-7. For agent-drafted-but-risky parts, implement them **and attach the verification gate** (the specific check that would catch a silent error). Do not hand over risky code without the check.
-8. For manual-core parts, **default to full implementation plus an explicit "understanding ledger"** — a short note of which insights the researcher is skipping by not writing it themselves — rather than withholding code. Offer the scaffold-only version as the alternative.
+7. For risky parts: implement them **and attach the gate**. Never hand over risk-column code without the check.
+8. For manual-core parts: **default to full code plus an "understanding ledger"** (a short note of which insights the researcher skips by reading instead of writing), rather than withholding code. Offer the scaffold-only version as the alternative.
 
-This flipped default matters: a capable researcher who is told "I'll only give you a scaffold" often experiences that as condescension and friction, not learning. Giving the full thing *plus* a clear map of what understanding was bypassed respects their agency and still protects against the silent-loss-of-intuition failure. Withhold only when the user is explicitly in learning/training mode, or asks for it.
+Why the flipped default in step 8: telling a capable researcher "I'll only give you a scaffold" usually lands as friction, not learning. Full code plus a clear map of the bypassed understanding respects their agency and still flags the intuition risk. Withhold only in explicit learning/training mode, or on request.
 
-If the user is blocked by **setup, dependencies, boilerplate, file formats, logging, plotting, or routine tests**, just help and reduce friction.
-
-If the user is blocked by the **core mechanism, experimental judgment, failure interpretation, objective design, or what counts as a fair comparison**, slow down and preserve participation.
+Rule of thumb: friction at **setup, dependencies, boilerplate, I/O, logging, plotting, routine tests** → just help and reduce friction. Friction at the **core mechanism, experimental judgment, failure interpretation, objective design, or what counts as a fair comparison** → slow down and preserve participation.
 
 ## Capability calibration
 
-Treat "first use" as the first substantial task in the conversation. Ask at most 3–5 short questions — enough to set the boundary, not an exam. Prefer multiple-choice.
+Only when the boundary is unclear and the task is substantial. Ask at most 3–5 short questions — enough to set a boundary, not an exam. Prefer multiple choice, and infer from context first.
 
-Default questions:
-1. Your role: PI / postdoc / PhD / master / undergrad / engineer / other?
-2. Have you implemented this paper's or method's central mechanism once, by yourself, before?
+1. Role: PI / postdoc / PhD / master / undergrad / engineer / other?
+2. Have you implemented this method's central mechanism once, yourself, before?
 3. What do you most want to keep owning: the math, the core algorithm, debugging, experiment design, or the interpretation?
 4. What should the agent freely automate: environment, I/O, pipeline glue, plotting, tests, docs, packaging?
 5. Priority: learning / fast reproduction / new-method exploration / production-grade infrastructure?
 
 Adjust the grid:
-- Less prior exposure → more manual core and more checkpoints.
-- Strong prior experience → more agent-owned and co-created implementation.
+- Less prior exposure → more manual core, more checkpoints.
+- Strong experience → more agent-owned and co-created implementation.
 - Training context → explanation, prediction, and debugging checkpoints are mandatory.
-- Deadline / infrastructure context → automate setup aggressively, but still *name* the research decisions and keep the verification gates.
-
-## The verification gate (correctness-critical)
-
-Whenever the agent writes code in the high-risk column, attach the check that would catch a silent error. A gate is a concrete, runnable assertion — not "be careful."
-
-Common silent-bug zones across data and scientific code, and the gate for each:
-
-- **Units & scale** — mixing units (s vs ms, bytes vs bits, raw vs normalized), a wrong scale factor or magnitude. *Gate:* assert a known quantity comes out in the expected unit and order of magnitude.
-- **Index & coordinate conventions** — 0- vs 1-indexed, row- vs column-major, inclusive vs exclusive ranges, axis order. *Gate:* round-trip a known element through the transform and assert it lands where expected, or inject a known value at a known position and confirm its location.
-- **Sign, direction & ordering** — a flipped sign, ascending vs descending, a transposed or mis-oriented array. *Gate:* run it on a tiny hand-computed case and compare element by element.
-- **Aggregation over the wrong axis** — summing, averaging, or reducing across the wrong dimension. *Gate:* check the output shape and a hand-verified aggregate on a small input.
-- **Data alignment, joins & merges** — wrong key, duplicated or dropped rows, unpropagated identifiers, mis-aligned time series. *Gate:* check row counts and match completeness/contamination against a clean subset.
-- **Normalization & weighting** — wrong normalization constant, double counting, missing or mis-applied weights. *Gate:* recover a known calibrated value from known inputs.
-- **Time, timezone & epoch** — timezone offsets, epoch/reference shifts, off-by-one in date math. *Gate:* convert a known timestamp both ways and compare against an independent reference.
-- **Numerical stability** — float precision, overflow/underflow, NaN propagation, order-dependent accumulation. *Gate:* compare against a higher-precision or analytic reference on a known case.
-- **Data leakage & randomness** (ML / statistics) — train/test contamination, unfixed seeds, leaked features. *Gate:* assert the splits are disjoint and that a fixed seed reproduces the result.
-
-These are illustrative, not exhaustive — in a given domain, name the conventions and transforms where a wrong assumption would survive review (a field's own coordinate systems, calibration constants, or schema rules) and gate those too.
-
-State the relevant gate inline when you deliver the code. If you can't name a gate for risky code, say so explicitly — that itself is a warning.
+- Deadline / infrastructure context → automate setup aggressively, but still *name* the research decisions and keep the gates.
 
 ## Output templates
 
@@ -112,7 +118,7 @@ Default = full code + understanding ledger:
 2. **Understanding ledger:** 2–4 bullets naming the insights the researcher is *not* getting by reading instead of writing (e.g. "you're skipping the gradient-shape reasoning that explains why this term is needed").
 3. Offer the scaffold-only alternative: "Want the signatures + TODO blocks instead, so you implement the core yourself? I'll review."
 
-Scaffold-only mode (use when learning/training, or on request):
+Scaffold-only mode (use in learning/training, or on request):
 1. State the invariant or mechanism in plain language.
 2. Give signatures / pseudocode.
 3. Minimal TODO blocks, not full code.
@@ -125,40 +131,21 @@ Scaffold-only mode (use when learning/training, or on request):
 |---|---|---|---|
 | [stage] | [manual / co-created] | [allowed automation] | [explain / predict / debug / modify] |
 
-Checkpoints, e.g.:
-- Explain the core update or transform logic without looking at code.
-- Predict how changing one parameter (learning rate, threshold, regularization strength, sample size) changes the failure mode.
-- Implement the minimal version once before using an agent-generated refactor.
-- Diagnose one failed run before asking the agent to fix it.
-- Document which lines were agent-generated, edited, or hand-written.
+Checkpoints, e.g.: explain the core update or transform logic without looking at the code; predict how changing one parameter (learning rate, threshold, regularization strength, sample size) changes the failure mode; implement the minimal version once before using an agent-generated refactor; diagnose one failed run before asking the agent to fix it; document which lines were agent-generated, edited, or hand-written.
 
-## Context-specific guidance
+## Context-specific notes
 
-### Paper reproduction
-1. Identify the exact claim being reproduced.
-2. Extract the core algorithm, objective/metric, and evaluation protocol.
-3. Researcher implements or annotates the central mechanism once.
-4. Agent automates scaffolding, configs, logging, plotting, sanity tests — each risky piece with its gate.
-5. For discrepancies, separate: implementation bug, missing paper detail, compute/data difference, or genuine paper fragility. Do not auto-default to "our bug."
+**Reproduction** — pin the exact claim; extract the core algorithm, objective/metric, and evaluation protocol; researcher implements or annotates the central mechanism once; agent automates scaffolding, configs, logging, plotting, sanity tests, each risky piece with its gate. For discrepancies, separate the causes — implementation bug, missing paper detail, compute/data difference, or genuine paper fragility — and don't auto-default to "our bug." Don't produce a full repo unless the user opts out of the participation plan.
 
-Do not produce a full repo for a reproduction unless the user opts out of the participation plan.
+**New method** — reduce the idea to a minimal falsifiable prototype; researcher owns the core mechanism and the expected behavior; agent generates alternative formulations, harnesses, and diagnostic plots; require one hand-written or researcher-edited minimal implementation before large-scale engineering; treat surprising failures as research material, not just bugs.
 
-### New method development
-1. Reduce the idea to a minimal falsifiable prototype.
-2. Researcher owns the core mechanism and the expected behavior.
-3. Agent generates alternative formulations, harnesses, and diagnostic plots.
-4. Require one hand-written or researcher-edited minimal implementation before large-scale engineering.
-5. Treat surprising failures as research material, not just bugs.
+**Pipeline / infrastructure** — where the gate earns its keep. Glue, I/O, batching, config → agent-owned. Convention-sensitive transforms (units, index/coordinate conventions, joins, normalization, time) → agent-drafted-with-gate. The choice of *what the pipeline is allowed to assume about the data* → co-created or manual core.
 
-### Pipeline / infrastructure
-This is where the verification gate earns its keep. Glue, I/O, batching, and config are agent-owned; convention-sensitive transforms (units, index/coordinate conventions, joins, normalization, time handling) are agent-drafted-with-gate; the choice of *what the pipeline is allowed to assume about the data* is co-created or manual core.
-
-### Lab student training
-Use the skill as a supervision protocol. Define what the student must understand after the task, assign manual-core work that creates exactly that understanding, allow agent support only where it doesn't hide the learning objective, and gate on explanation/prediction/debugging.
+**Student training** — use the skill as a supervision protocol: define what the student must understand after the task, assign manual-core work that creates exactly that understanding, allow agent support only where it doesn't hide the learning objective, and gate on explanation/prediction/debugging.
 
 ## Override rule
 
-If the user explicitly asks for full automation after seeing the plan, comply unless unsafe. Still (a) mark which parts would normally be manual core, (b) keep the verification gates on risky code regardless — bypassing *understanding* is the user's call, bypassing *correctness checks* on result-poisoning code is not something to do silently.
+If the user explicitly asks for full automation after seeing the plan, comply unless unsafe. Still (a) mark which parts would normally be manual core, and (b) keep the verification gates on risky code regardless. Bypassing *understanding* is the user's call; silently bypassing *correctness checks* on result-poisoning code is not.
 
 ## Style
 

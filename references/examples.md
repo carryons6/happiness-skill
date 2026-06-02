@@ -1,4 +1,4 @@
-# Examples for Happiness
+# Examples for Research Guardrail
 
 ## Example: paper reproduction
 
