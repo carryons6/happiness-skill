@@ -64,14 +64,12 @@ git clone https://github.com/carryons6/happiness-skill.git ~/.codex/skills/happi
 
 ## 如何触发
 
-装好之后，这个 skill 有两种触发方式：
+这个 skill **只在显式调用时触发**——即使任务看起来像复现论文、开发新方法或构建流水线，它也不会自行触发。需要时按名字唤起：
 
-- **自动触发**：Claude Code / Codex 会读取 skill 的 `description`，在任务匹配时自行调用——复现论文、开发新方法、构建或调试流水线、训练学生，甚至只是一个「快速实现」但做错可能污染结果的场景。你不必点名。
-- **显式触发**：想强制调用时按名字唤起：
-  - **Claude Code**：运行 `/happiness` 斜杠命令，或直接用自然语言，例如 *“用 happiness skill 帮我规划这篇论文的复现。”*
-  - **Codex**：`$happiness`。
+- **Claude Code**：运行 `/happiness` 斜杠命令，或直接用自然语言，例如 *“用 happiness skill 帮我规划这篇论文的复现。”*
+- **Codex**：`$happiness`。
 
-在一次对话里第一次处理实质性任务时，skill 会先跑一轮简短的[首次校准](#首次使用校准)（3–5 个问题），再给出方案。
+在你调用它之后第一次处理实质性任务时，skill 会先跑一轮简短的[首次校准](#首次使用校准)（3–5 个问题），再给出方案。
 
 ## 它解决什么问题
 
@@ -114,7 +112,7 @@ git clone https://github.com/carryons6/happiness-skill.git ~/.codex/skills/happi
 - 训练实验室学生合理使用 coding agent；
 - 判断哪些部分交给 agent 自动化、哪些应该亲手实现并验证。
 
-即使用户只是要一个「快速实现」，只要做错可能悄悄污染科学结果，也应触发它。
+即使只是一个「快速实现」，只要做错可能悄悄污染科学结果，也值得显式调用它。
 
 ## 首次使用校准
 

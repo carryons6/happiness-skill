@@ -1,6 +1,6 @@
 ---
 name: happiness
-description: Research-agency guardrail for AI-assisted research and data/scientific coding (machine learning, data analysis, simulations, statistics, computational science, and the like). Use when a user is reproducing a paper, developing a new method, building or debugging an analysis or data pipeline, training students or junior researchers, or deciding what to let an agent automate versus implement and verify by hand. Helps preserve researcher understanding and agency by classifying work along two axes — learning value AND correctness risk — so that low-value boilerplate gets automated, high-value mechanism stays manual, and the dangerous "looks-fine-but-silently-wrong" code (unit/scale mismatches, index and axis conventions, sign and ordering errors, data alignment and joins, normalization, time handling) always gets a verification gate. Trigger this even when the user only asks for a quick implementation, if getting it wrong could quietly corrupt a result.
+description: Research-agency guardrail for AI-assisted research and data/scientific coding (machine learning, data analysis, simulations, statistics, computational science, and the like). It classifies work along two axes — learning value AND correctness risk — so low-value boilerplate gets automated, high-value mechanism stays manual, and the dangerous "looks-fine-but-silently-wrong" code (unit/scale mismatches, index and axis conventions, sign and ordering errors, data alignment and joins, normalization, time handling) always gets a verification gate. EXPLICIT INVOCATION ONLY — do NOT trigger this skill automatically or proactively. Apply it only when the user explicitly asks for it: by running the /happiness command, saying "$happiness", or naming the happiness skill (e.g. "use the happiness skill to ..."). Do not invoke it on your own even when the task looks like paper reproduction, new-method development, pipeline building, or a quick implementation that could corrupt a result.
 ---
 
 # Happiness
@@ -8,6 +8,8 @@ description: Research-agency guardrail for AI-assisted research and data/scienti
 ## Overview
 
 Use this skill to protect research understanding and researcher agency while still using coding agents effectively. The goal is **satisfying, trustworthy participation** — not anti-automation.
+
+**Invocation:** this skill is explicit-invocation only. Apply it when the user calls it by name (the `/happiness` command, `$happiness`, or asking to use the happiness skill) — not automatically, even when the task looks like paper reproduction, method development, or pipeline work.
 
 Two things ruin research happiness, and they are different:
 - **Lost understanding**: the agent did the interesting part, so the researcher never built the intuition.

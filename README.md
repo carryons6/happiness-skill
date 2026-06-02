@@ -64,14 +64,12 @@ git clone https://github.com/carryons6/happiness-skill.git ~/.codex/skills/happi
 
 ## Triggering the Skill
 
-Once installed, the skill fires in two ways:
+The skill is **explicit-invocation only** — it will not fire on its own, even when your task looks like paper reproduction, method development, or pipeline work. Invoke it by name when you want it:
 
-- **Automatically** — Claude Code / Codex reads the skill's `description` and invokes it on its own when your task matches: reproducing a paper, developing a new method, building or debugging a pipeline, training students, or even a "quick" implementation where a silent bug could poison a result. You don't have to name it.
-- **Explicitly** — invoke it by name when you want to force it:
-  - **Claude Code**: run the `/happiness` slash command, or just ask in plain language, e.g. *"Use the happiness skill to plan how I should reproduce this paper."*
-  - **Codex**: `$happiness`.
+- **Claude Code**: run the `/happiness` slash command, or just ask in plain language, e.g. *"Use the happiness skill to plan how I should reproduce this paper."*
+- **Codex**: `$happiness`.
 
-On the first substantial task in a conversation, the skill runs a short [calibration](#first-use-calibration) (3–5 questions) before it produces a plan.
+On the first substantial task after you invoke it, the skill runs a short [calibration](#first-use-calibration) (3–5 questions) before it produces a plan.
 
 ## What It Does
 
@@ -114,7 +112,7 @@ Use this skill when a user is:
 - training lab students to use coding agents responsibly,
 - deciding what to let an agent automate versus implement and verify by hand.
 
-Trigger it even for a "quick implementation" if getting it wrong could quietly poison a scientific result.
+Invoke it even for a "quick implementation" if getting it wrong could quietly poison a scientific result.
 
 ## First-Use Calibration
 
