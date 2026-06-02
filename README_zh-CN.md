@@ -30,29 +30,36 @@ git clone https://github.com/carryons6/happiness-skill.git ~/.claude/skills/happ
 
 ### Codex
 
-推荐方式：在 Codex 里使用内置的 skill installer 安装。
+**一键安装（推荐）**——一行命令，安装到 `~/.codex/skills/happiness`。重复执行即可更新。
+
+macOS / Linux：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/carryons6/happiness-skill/main/install.sh | bash
+```
+
+Windows（PowerShell）：
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/carryons6/happiness-skill/main/install.ps1 | iex
+```
+
+安装后重启 Codex，让它重新发现这个 skill。脚本支持用 `CODEX_HOME` 和 `HAPPINESS_REF`（分支/标签）环境变量覆盖默认值。
+
+**其他方式**
+
+内置 skill installer：
 
 ```text
 Use $skill-installer to install the skill from https://github.com/carryons6/happiness-skill.
 Use path "." and install it as "happiness".
 ```
 
-安装后重启 Codex，让它重新发现这个 skill。
-
-等价的命令行方式：
-
-```bash
-python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --repo carryons6/happiness-skill \
-  --path . \
-  --name happiness
-```
-
-手动安装 fallback：
+手动克隆：
 
 ```bash
 mkdir -p ~/.codex/skills
-git clone git@github.com:carryons6/happiness-skill.git ~/.codex/skills/happiness
+git clone https://github.com/carryons6/happiness-skill.git ~/.codex/skills/happiness
 ```
 
 ## 如何触发
@@ -133,6 +140,8 @@ git clone git@github.com:carryons6/happiness-skill.git ~/.codex/skills/happiness
 │   ├── plugin.json        # Claude Code 插件清单
 │   └── marketplace.json   # marketplace 目录，供 /plugin marketplace add 使用
 ├── SKILL.md               # 技能本体（在仓库根目录同时作为单技能插件）
+├── install.sh             # Codex 一键安装脚本（macOS / Linux）
+├── install.ps1            # Codex 一键安装脚本（Windows）
 ├── agents/
 │   └── openai.yaml        # Codex 界面元数据
 └── references/

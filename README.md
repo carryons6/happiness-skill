@@ -30,29 +30,36 @@ Or use it as a project skill by placing it under `.claude/skills/happiness/` in 
 
 ### Codex
 
-Recommended: install it through Codex with the built-in skill installer.
+**Quick install (recommended)** — one line; installs into `~/.codex/skills/happiness`. Re-run it later to update.
+
+macOS / Linux:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/carryons6/happiness-skill/main/install.sh | bash
+```
+
+Windows (PowerShell):
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/carryons6/happiness-skill/main/install.ps1 | iex
+```
+
+Then restart Codex so it can discover the skill. The scripts honor `CODEX_HOME` and `HAPPINESS_REF` (branch/tag) if you need to override them.
+
+**Other methods**
+
+Built-in skill installer:
 
 ```text
 Use $skill-installer to install the skill from https://github.com/carryons6/happiness-skill.
 Use path "." and install it as "happiness".
 ```
 
-Then restart Codex so it can discover the new skill.
-
-CLI equivalent:
-
-```bash
-python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --repo carryons6/happiness-skill \
-  --path . \
-  --name happiness
-```
-
-Manual fallback:
+Manual clone:
 
 ```bash
 mkdir -p ~/.codex/skills
-git clone git@github.com:carryons6/happiness-skill.git ~/.codex/skills/happiness
+git clone https://github.com/carryons6/happiness-skill.git ~/.codex/skills/happiness
 ```
 
 ## Triggering the Skill
@@ -133,6 +140,8 @@ By default the skill delivers the **full working implementation plus an "underst
 │   ├── plugin.json        # Claude Code plugin manifest
 │   └── marketplace.json   # marketplace catalog for /plugin marketplace add
 ├── SKILL.md               # the skill (also a single-skill plugin at repo root)
+├── install.sh             # Codex one-line installer (macOS / Linux)
+├── install.ps1            # Codex one-line installer (Windows)
 ├── agents/
 │   └── openai.yaml        # Codex interface metadata
 └── references/
