@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "happiness",
   "displayName": "Happiness",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Research-agency guardrail for AI-assisted research coding, tuned for observational astronomy and data pipelines. Classifies each module by learning value and correctness risk, automates the safe parts, and attaches a verification gate to silently-wrong code (WCS, units, time systems, flux scaling).",
   "author": {
     "name": "carryons6",
