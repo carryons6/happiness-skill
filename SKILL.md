@@ -1,6 +1,6 @@
 ---
 name: happiness
-description: Research-agency guardrail for AI-assisted research coding, tuned for observational-astronomy and data-pipeline work (astrometry, photometry, image registration/stacking, source detection, catalog matching, FITS/WCS handling). Use when a user is reproducing a paper, developing a new method, building or debugging an analysis pipeline, training lab students, or deciding what to let an agent automate versus implement and verify by hand. Helps preserve researcher understanding and agency by classifying work along two axes — learning value AND correctness risk — so that low-value boilerplate gets automated, high-value mechanism stays manual, and the dangerous "looks-fine-but-silently-wrong" code (coordinate conventions, units, time systems, flux scaling) always gets a verification gate. Trigger this even when the user only asks for a quick implementation, if getting it wrong could quietly poison a scientific result.
+description: Research-agency guardrail for AI-assisted research and data/scientific coding (machine learning, data analysis, simulations, statistics, computational science, and the like). Use when a user is reproducing a paper, developing a new method, building or debugging an analysis or data pipeline, training students or junior researchers, or deciding what to let an agent automate versus implement and verify by hand. Helps preserve researcher understanding and agency by classifying work along two axes — learning value AND correctness risk — so that low-value boilerplate gets automated, high-value mechanism stays manual, and the dangerous "looks-fine-but-silently-wrong" code (unit/scale mismatches, index and axis conventions, sign and ordering errors, data alignment and joins, normalization, time handling) always gets a verification gate. Trigger this even when the user only asks for a quick implementation, if getting it wrong could quietly corrupt a result.
 ---
 
 # Happiness
@@ -13,7 +13,7 @@ Two things ruin research happiness, and they are different:
 - **Lost understanding**: the agent did the interesting part, so the researcher never built the intuition.
 - **Lost trust**: the agent wrote plausible code that was silently wrong, and a conclusion got poisoned.
 
-The original framing only guarded the first. In data-pipeline science the second is often the bigger threat, because the wrong code *runs*, *looks reasonable*, and *produces a number*.
+The original framing only guarded the first. In data and computational research the second is often the bigger threat, because the wrong code *runs*, *looks reasonable*, and *produces a number*.
 
 Core principle: **classify every module on two axes before writing substantial code** — how much the researcher learns by owning it, and how much a silent error would cost. Automate freely only when both are low.
 
@@ -28,7 +28,7 @@ Classify each module by **learning value** (does owning it build research intuit
 | **High learning value** | **MANUAL CORE** — own it to understand | **MANUAL CORE + hard verification** — own it *and* prove it right |
 | **Low learning value** | **AGENT-OWNED** — automate freely | **AGENT-DRAFTED + VERIFICATION GATE** — let the agent write it, but never trust it blind |
 
-The bottom-right cell is the one the original skill missed. You don't need to *understand* a FITS-axis transpose deeply, but you must *verify* it, because getting it wrong shifts every centroid and you'll find out three figures later.
+The bottom-right cell is the one the original skill missed. You don't need to deeply *understand* an array reshape, a unit conversion, or a table join, but you must *verify* it, because getting it wrong silently corrupts every downstream value and you'll find out three figures later.
 
 **Co-created** still exists as a label for "agent broadens options, researcher chooses" — it usually lands in the top-right or bottom-right cells (design choices that are both somewhat instructive and consequential).
 
@@ -66,22 +66,25 @@ Adjust the grid:
 - Less prior exposure → more manual core and more checkpoints.
 - Strong prior experience → more agent-owned and co-created implementation.
 - Training context → explanation, prediction, and debugging checkpoints are mandatory.
-- Deadline / infrastructure context → automate setup aggressively, but still *name* the science decisions and keep the verification gates.
+- Deadline / infrastructure context → automate setup aggressively, but still *name* the research decisions and keep the verification gates.
 
-## The verification gate (domain-critical)
+## The verification gate (correctness-critical)
 
 Whenever the agent writes code in the high-risk column, attach the check that would catch a silent error. A gate is a concrete, runnable assertion — not "be careful."
 
-Common silent-bug zones in observational-astronomy pipelines, and the gate for each:
+Common silent-bug zones across data and scientific code, and the gate for each:
 
-- **Array vs sky axis order** — FITS `NAXIS1`=x maps to the *last* numpy axis; a stray transpose flips everything. *Gate:* inject a source at a known pixel, confirm it lands at the expected `(x, y)` and sky position.
-- **Pixel index origin** — FITS/WCS is 1-indexed, numpy is 0-indexed; off-by-one shifts every centroid by a pixel. *Gate:* round-trip `pix → world → pix` on known points and assert sub-milli-pixel closure.
-- **Coordinate frame & epoch** — ICRS vs FK5/J2000, mean vs apparent place, catalog positions not propagated to the observation epoch. *Gate:* match against a reference star and check the residual is at the expected scale, not systematically offset.
-- **Time systems** — UTC / TT / TAI / TDB, JD vs MJD, leap seconds. A wrong system biases ephemeris-dependent positions. *Gate:* convert a known timestamp both ways and compare against an independent reference.
-- **Flux / magnitude scaling** — zeropoints, AB vs Vega, gain, exposure-time normalization. *Gate:* recover a known instrumental→calibrated magnitude on a standard.
-- **Units & pixel scale** — arcsec vs deg vs rad, plate scale direction. *Gate:* assert a known angular separation in physical units.
-- **Resampling / interpolation in stacking** — alignment reference choice, kernel-induced PSF broadening, weight-map handling. *Gate:* stack a synthetic field and confirm injected-source positions and the noise statistics behave as predicted.
-- **Catalog match radius & epoch** — wrong units or un-propagated proper motions create false or missed matches. *Gate:* check match completeness/contamination against a clean subset.
+- **Units & scale** — mixing units (s vs ms, bytes vs bits, raw vs normalized), a wrong scale factor or magnitude. *Gate:* assert a known quantity comes out in the expected unit and order of magnitude.
+- **Index & coordinate conventions** — 0- vs 1-indexed, row- vs column-major, inclusive vs exclusive ranges, axis order. *Gate:* round-trip a known element through the transform and assert it lands where expected, or inject a known value at a known position and confirm its location.
+- **Sign, direction & ordering** — a flipped sign, ascending vs descending, a transposed or mis-oriented array. *Gate:* run it on a tiny hand-computed case and compare element by element.
+- **Aggregation over the wrong axis** — summing, averaging, or reducing across the wrong dimension. *Gate:* check the output shape and a hand-verified aggregate on a small input.
+- **Data alignment, joins & merges** — wrong key, duplicated or dropped rows, unpropagated identifiers, mis-aligned time series. *Gate:* check row counts and match completeness/contamination against a clean subset.
+- **Normalization & weighting** — wrong normalization constant, double counting, missing or mis-applied weights. *Gate:* recover a known calibrated value from known inputs.
+- **Time, timezone & epoch** — timezone offsets, epoch/reference shifts, off-by-one in date math. *Gate:* convert a known timestamp both ways and compare against an independent reference.
+- **Numerical stability** — float precision, overflow/underflow, NaN propagation, order-dependent accumulation. *Gate:* compare against a higher-precision or analytic reference on a known case.
+- **Data leakage & randomness** (ML / statistics) — train/test contamination, unfixed seeds, leaked features. *Gate:* assert the splits are disjoint and that a fixed seed reproduces the result.
+
+These are illustrative, not exhaustive — in a given domain, name the conventions and transforms where a wrong assumption would survive review (a field's own coordinate systems, calibration constants, or schema rules) and gate those too.
 
 State the relevant gate inline when you deliver the code. If you can't name a gate for risky code, say so explicitly — that itself is a warning.
 
@@ -121,8 +124,8 @@ Scaffold-only mode (use when learning/training, or on request):
 | [stage] | [manual / co-created] | [allowed automation] | [explain / predict / debug / modify] |
 
 Checkpoints, e.g.:
-- Explain the core update or registration logic without looking at code.
-- Predict how changing one parameter (detection threshold, stack depth, match radius) changes the failure mode.
+- Explain the core update or transform logic without looking at code.
+- Predict how changing one parameter (learning rate, threshold, regularization strength, sample size) changes the failure mode.
 - Implement the minimal version once before using an agent-generated refactor.
 - Diagnose one failed run before asking the agent to fix it.
 - Document which lines were agent-generated, edited, or hand-written.
@@ -146,7 +149,7 @@ Do not produce a full repo for a reproduction unless the user opts out of the pa
 5. Treat surprising failures as research material, not just bugs.
 
 ### Pipeline / infrastructure
-This is where the verification gate earns its keep. Glue, I/O, batching, and config are agent-owned; convention-sensitive transforms (WCS, time, flux, resampling) are agent-drafted-with-gate; the choice of *what the pipeline is allowed to assume about the data* is co-created or manual core.
+This is where the verification gate earns its keep. Glue, I/O, batching, and config are agent-owned; convention-sensitive transforms (units, index/coordinate conventions, joins, normalization, time handling) are agent-drafted-with-gate; the choice of *what the pipeline is allowed to assume about the data* is co-created or manual core.
 
 ### Lab student training
 Use the skill as a supervision protocol. Define what the student must understand after the task, assign manual-core work that creates exactly that understanding, allow agent support only where it doesn't hide the learning objective, and gate on explanation/prediction/debugging.

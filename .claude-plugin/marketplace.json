@@ -8,11 +8,11 @@
     {
       "name": "happiness",
       "source": "./",
-      "description": "Research-agency guardrail for AI-assisted research coding, tuned for observational astronomy and data pipelines.",
+      "description": "Research-agency guardrail for AI-assisted research and data/scientific coding.",
       "category": "research",
       "tags": [
-        "astronomy",
-        "data-pipeline",
+        "research",
+        "data-science",
         "reproducibility",
         "verification"
       ]

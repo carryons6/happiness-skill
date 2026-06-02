@@ -3,7 +3,7 @@
   "name": "happiness",
   "displayName": "Happiness",
   "version": "0.0.2",
-  "description": "Research-agency guardrail for AI-assisted research coding, tuned for observational astronomy and data pipelines. Classifies each module by learning value and correctness risk, automates the safe parts, and attaches a verification gate to silently-wrong code (WCS, units, time systems, flux scaling).",
+  "description": "Research-agency guardrail for AI-assisted research and data/scientific coding. Classifies each module by learning value and correctness risk, automates the safe parts, and attaches a verification gate to silently-wrong code (units, index/axis conventions, data joins, normalization, time handling).",
   "author": {
     "name": "carryons6",
     "url": "https://github.com/carryons6"
@@ -13,8 +13,8 @@
   "license": "MIT",
   "keywords": [
     "research",
-    "astronomy",
-    "data-pipeline",
+    "data-science",
+    "machine-learning",
     "reproducibility",
     "verification",
     "skill"

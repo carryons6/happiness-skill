@@ -5,7 +5,7 @@
 
 Happiness is a skill for AI-assisted research coding. It helps researchers use coding agents without losing the parts of the work that create understanding, judgment, and ownership — and without letting plausible-looking code silently poison a scientific result.
 
-It is tuned for observational-astronomy and data-pipeline work (astrometry, photometry, image registration/stacking, source detection, catalog matching, FITS/WCS handling), but the workflow applies to any research coding.
+It applies across research and data/scientific coding — machine learning, data analysis, simulations, statistics, computational science, and beyond.
 
 [中文说明](README_zh-CN.md)
 
@@ -96,11 +96,11 @@ The goal is not to avoid automation. The goal is to automate low-value pain, pre
 
 ## The Verification Gate
 
-For any risky code (coordinate conventions, units, time systems, flux scaling, resampling, catalog matching), the skill attaches a concrete, runnable check that would catch a silent error — not "be careful." For example:
+For any risky code (units and scale, index/axis conventions, data joins and alignment, normalization, time handling), the skill attaches a concrete, runnable check that would catch a silent error — not "be careful." For example:
 
-- **Array vs sky axis order** — inject a source at a known pixel, confirm it lands at the expected `(x, y)` and sky position.
-- **Pixel index origin** — round-trip `pix → world → pix` on known points and assert sub-milli-pixel closure.
-- **Time systems** — convert a known timestamp both ways and compare against an independent reference.
+- **Index & axis conventions** — round-trip a known element through the transform, or inject a known value and confirm where it lands.
+- **Data joins & alignment** — check row counts and match completeness against a clean subset.
+- **Time & timezone handling** — convert a known timestamp both ways and compare against an independent reference.
 
 If a gate can't be named for risky code, the skill says so explicitly — that itself is the warning.
 
