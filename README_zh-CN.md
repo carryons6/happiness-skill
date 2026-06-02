@@ -9,6 +9,63 @@ Happiness 是一个面向 AI 辅助科研编程的 skill。它的目标是让研
 
 [English README](README.md)
 
+## 安装
+
+### Claude Code
+
+**作为 plugin 安装（推荐）**——仓库自带一个 plugin marketplace，可以直接用 `/plugin` 安装：
+
+```text
+/plugin marketplace add carryons6/happiness-skill
+/plugin install happiness@happiness-skill
+```
+
+**作为个人 skill**——克隆到你的 skills 目录：
+
+```bash
+git clone https://github.com/carryons6/happiness-skill.git ~/.claude/skills/happiness
+```
+
+或作为项目 skill，把它放到仓库的 `.claude/skills/happiness/` 下。Claude Code 会根据 `SKILL.md` 的 frontmatter 自动发现这个 skill。
+
+### Codex
+
+推荐方式：在 Codex 里使用内置的 skill installer 安装。
+
+```text
+Use $skill-installer to install the skill from https://github.com/carryons6/happiness-skill.
+Use path "." and install it as "happiness".
+```
+
+安装后重启 Codex，让它重新发现这个 skill。
+
+等价的命令行方式：
+
+```bash
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --repo carryons6/happiness-skill \
+  --path . \
+  --name happiness
+```
+
+手动安装 fallback：
+
+```bash
+mkdir -p ~/.codex/skills
+git clone git@github.com:carryons6/happiness-skill.git ~/.codex/skills/happiness
+```
+
+## 如何触发
+
+装好之后，这个 skill 有两种触发方式：
+
+- **自动触发**：Claude Code / Codex 会读取 skill 的 `description`，在任务匹配时自行调用——复现论文、开发新方法、构建或调试流水线、训练学生，甚至只是一个「快速实现」但做错可能污染结果的场景。你不必点名。
+- **显式触发**：想强制调用时按名字唤起：
+  - **Claude Code**：运行 `/happiness` 斜杠命令，或直接用自然语言，例如 *“用 happiness skill 帮我规划这篇论文的复现。”*
+  - **Codex**：`$happiness`。
+
+在一次对话里第一次处理实质性任务时，skill 会先跑一轮简短的[首次校准](#首次使用校准)（3–5 个问题），再给出方案。
+
 ## 它解决什么问题
 
 这个 skill 会在大规模生成代码之前，先加上一层科研 agency 护栏。它防范 AI 辅助科研出错的两种不同方式：
@@ -68,62 +125,6 @@ Happiness 是一个面向 AI 辅助科研编程的 skill。它的目标是让研
 
 默认情况下，skill 会交付**完整可用的实现 + 一份「理解账本」（understanding ledger）**——简短列出你「读代码而非亲手写」所跳过的洞见——而不是藏着代码不给。Scaffold-only 模式（只给函数签名 + 待填 TODO，由你实现核心）作为备选，在明确的学习/训练场景下默认采用。
 
-## 安装
-
-### Claude Code
-
-**作为 plugin 安装（推荐）**——仓库自带一个 plugin marketplace，可以直接用 `/plugin` 安装：
-
-```text
-/plugin marketplace add carryons6/happiness-skill
-/plugin install happiness@happiness-skill
-```
-
-**作为个人 skill**——克隆到你的 skills 目录：
-
-```bash
-git clone https://github.com/carryons6/happiness-skill.git ~/.claude/skills/happiness
-```
-
-或作为项目 skill，把它放到仓库的 `.claude/skills/happiness/` 下。Claude Code 会根据 `SKILL.md` 的 frontmatter 自动发现这个 skill。
-
-### Codex
-
-推荐方式：在 Codex 里使用内置的 skill installer 安装。
-
-```text
-Use $skill-installer to install the skill from https://github.com/carryons6/happiness-skill.
-Use path "." and install it as "happiness".
-```
-
-安装后重启 Codex，让它重新发现这个 skill。
-
-等价的命令行方式：
-
-```bash
-python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --repo carryons6/happiness-skill \
-  --path . \
-  --name happiness
-```
-
-手动安装 fallback：
-
-```bash
-mkdir -p ~/.codex/skills
-git clone git@github.com:carryons6/happiness-skill.git ~/.codex/skills/happiness
-```
-
-## 使用方式
-
-可以显式调用：
-
-```text
-Use the happiness skill to plan how I should reproduce this paper with a coding agent.
-```
-
-也可以让 agent 根据 skill 描述自动触发，例如在论文复现、新方法开发、流水线构建、学生训练等任务中触发。
-
 ## 仓库结构
 
 ```text
@@ -140,7 +141,13 @@ Use the happiness skill to plan how I should reproduce this paper with a coding 
 
 ## 校验
 
-用下面的命令校验 skill 结构：
+校验 Claude Code 插件清单：
+
+```bash
+claude plugin validate .
+```
+
+校验 Codex skill 结构：
 
 ```bash
 python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py .

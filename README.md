@@ -9,6 +9,63 @@ It is tuned for observational-astronomy and data-pipeline work (astrometry, phot
 
 [中文说明](README_zh-CN.md)
 
+## Install
+
+### Claude Code
+
+**As a plugin (recommended)** — the repo ships a plugin marketplace, so you can install it with `/plugin`:
+
+```text
+/plugin marketplace add carryons6/happiness-skill
+/plugin install happiness@happiness-skill
+```
+
+**As a personal skill** — clone into your skills directory:
+
+```bash
+git clone https://github.com/carryons6/happiness-skill.git ~/.claude/skills/happiness
+```
+
+Or use it as a project skill by placing it under `.claude/skills/happiness/` in your repository. Claude Code discovers the skill automatically from the `SKILL.md` frontmatter.
+
+### Codex
+
+Recommended: install it through Codex with the built-in skill installer.
+
+```text
+Use $skill-installer to install the skill from https://github.com/carryons6/happiness-skill.
+Use path "." and install it as "happiness".
+```
+
+Then restart Codex so it can discover the new skill.
+
+CLI equivalent:
+
+```bash
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --repo carryons6/happiness-skill \
+  --path . \
+  --name happiness
+```
+
+Manual fallback:
+
+```bash
+mkdir -p ~/.codex/skills
+git clone git@github.com:carryons6/happiness-skill.git ~/.codex/skills/happiness
+```
+
+## Triggering the Skill
+
+Once installed, the skill fires in two ways:
+
+- **Automatically** — Claude Code / Codex reads the skill's `description` and invokes it on its own when your task matches: reproducing a paper, developing a new method, building or debugging a pipeline, training students, or even a "quick" implementation where a silent bug could poison a result. You don't have to name it.
+- **Explicitly** — invoke it by name when you want to force it:
+  - **Claude Code**: run the `/happiness` slash command, or just ask in plain language, e.g. *"Use the happiness skill to plan how I should reproduce this paper."*
+  - **Codex**: `$happiness`.
+
+On the first substantial task in a conversation, the skill runs a short [calibration](#first-use-calibration) (3–5 questions) before it produces a plan.
+
 ## What It Does
 
 The skill adds a research-agency guardrail before substantial coding work. It guards against two different ways AI-assisted research goes wrong:
@@ -68,62 +125,6 @@ The answers shift the grid — less prior exposure means more manual core and mo
 
 By default the skill delivers the **full working implementation plus an "understanding ledger"** — a short note of which insights you skip by reading the code instead of writing it yourself — rather than withholding code. Scaffold-only mode (signatures + TODO blocks for you to fill in) is offered as the alternative, and used by default in explicit learning or training contexts.
 
-## Install
-
-### Claude Code
-
-**As a plugin (recommended)** — the repo ships a plugin marketplace, so you can install it with `/plugin`:
-
-```text
-/plugin marketplace add carryons6/happiness-skill
-/plugin install happiness@happiness-skill
-```
-
-**As a personal skill** — clone into your skills directory:
-
-```bash
-git clone https://github.com/carryons6/happiness-skill.git ~/.claude/skills/happiness
-```
-
-Or use it as a project skill by placing it under `.claude/skills/happiness/` in your repository. Claude Code discovers the skill automatically from the `SKILL.md` frontmatter.
-
-### Codex
-
-Recommended: install it through Codex with the built-in skill installer.
-
-```text
-Use $skill-installer to install the skill from https://github.com/carryons6/happiness-skill.
-Use path "." and install it as "happiness".
-```
-
-Then restart Codex so it can discover the new skill.
-
-CLI equivalent:
-
-```bash
-python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --repo carryons6/happiness-skill \
-  --path . \
-  --name happiness
-```
-
-Manual fallback:
-
-```bash
-mkdir -p ~/.codex/skills
-git clone git@github.com:carryons6/happiness-skill.git ~/.codex/skills/happiness
-```
-
-## Use
-
-Invoke it directly:
-
-```text
-Use the happiness skill to plan how I should reproduce this paper with a coding agent.
-```
-
-Or rely on the skill description to trigger it when the task involves research reproduction, method development, pipeline building, or student training.
-
 ## Repository Layout
 
 ```text
@@ -140,7 +141,13 @@ Or rely on the skill description to trigger it when the task involves research r
 
 ## Validation
 
-Validate the skill structure with:
+For the Claude Code plugin manifest:
+
+```bash
+claude plugin validate .
+```
+
+For the Codex skill structure:
 
 ```bash
 python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
