@@ -72,7 +72,14 @@ By default the skill delivers the **full working implementation plus an "underst
 
 ### Claude Code
 
-Personal skill — clone into your skills directory:
+**As a plugin (recommended)** — the repo ships a plugin marketplace, so you can install it with `/plugin`:
+
+```text
+/plugin marketplace add carryons6/happiness-skill
+/plugin install happiness@happiness-skill
+```
+
+**As a personal skill** — clone into your skills directory:
 
 ```bash
 git clone https://github.com/carryons6/happiness-skill.git ~/.claude/skills/happiness
@@ -121,9 +128,12 @@ Or rely on the skill description to trigger it when the task involves research r
 
 ```text
 .
-├── SKILL.md
+├── .claude-plugin/
+│   ├── plugin.json        # Claude Code plugin manifest
+│   └── marketplace.json   # marketplace catalog for /plugin marketplace add
+├── SKILL.md               # the skill (also a single-skill plugin at repo root)
 ├── agents/
-│   └── openai.yaml
+│   └── openai.yaml        # Codex interface metadata
 └── references/
     └── examples.md
 ```

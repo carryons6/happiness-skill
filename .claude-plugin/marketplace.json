@@ -1,0 +1,21 @@
+{
+  "name": "happiness-skill",
+  "owner": {
+    "name": "carryons6"
+  },
+  "description": "Marketplace hosting the Happiness research-agency skill.",
+  "plugins": [
+    {
+      "name": "happiness",
+      "source": "./",
+      "description": "Research-agency guardrail for AI-assisted research coding, tuned for observational astronomy and data pipelines.",
+      "category": "research",
+      "tags": [
+        "astronomy",
+        "data-pipeline",
+        "reproducibility",
+        "verification"
+      ]
+    }
+  ]
+}

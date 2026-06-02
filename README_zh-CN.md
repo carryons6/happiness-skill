@@ -72,7 +72,14 @@ Happiness 是一个面向 AI 辅助科研编程的 skill。它的目标是让研
 
 ### Claude Code
 
-作为个人 skill，克隆到你的 skills 目录：
+**作为 plugin 安装（推荐）**——仓库自带一个 plugin marketplace，可以直接用 `/plugin` 安装：
+
+```text
+/plugin marketplace add carryons6/happiness-skill
+/plugin install happiness@happiness-skill
+```
+
+**作为个人 skill**——克隆到你的 skills 目录：
 
 ```bash
 git clone https://github.com/carryons6/happiness-skill.git ~/.claude/skills/happiness
@@ -121,9 +128,12 @@ Use the happiness skill to plan how I should reproduce this paper with a coding 
 
 ```text
 .
-├── SKILL.md
+├── .claude-plugin/
+│   ├── plugin.json        # Claude Code 插件清单
+│   └── marketplace.json   # marketplace 目录，供 /plugin marketplace add 使用
+├── SKILL.md               # 技能本体（在仓库根目录同时作为单技能插件）
 ├── agents/
-│   └── openai.yaml
+│   └── openai.yaml        # Codex 界面元数据
 └── references/
     └── examples.md
 ```
