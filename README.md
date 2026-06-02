@@ -137,7 +137,10 @@ By default the skill delivers the **full working implementation plus an "underst
 ├── .claude-plugin/
 │   ├── plugin.json        # Claude Code plugin manifest
 │   └── marketplace.json   # marketplace catalog for /plugin marketplace add
-├── SKILL.md               # the skill (also a single-skill plugin at repo root)
+├── SKILL.md               # skill body — used by Codex & personal/project Claude installs
+├── skills/
+│   └── research-guardrail/
+│       └── SKILL.md       # same body — loaded by the Claude Code plugin (keep in sync)
 ├── install.sh             # Codex one-line installer (macOS / Linux)
 ├── install.ps1            # Codex one-line installer (Windows)
 ├── agents/

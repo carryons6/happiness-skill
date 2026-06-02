@@ -137,7 +137,10 @@ git clone https://github.com/carryons6/research-guardrail-skill.git ~/.codex/ski
 ├── .claude-plugin/
 │   ├── plugin.json        # Claude Code 插件清单
 │   └── marketplace.json   # marketplace 目录，供 /plugin marketplace add 使用
-├── SKILL.md               # 技能本体（在仓库根目录同时作为单技能插件）
+├── SKILL.md               # 技能本体 — 供 Codex 与 个人/项目 Claude skill 安装使用
+├── skills/
+│   └── research-guardrail/
+│       └── SKILL.md       # 同一份本体 — Claude Code 插件加载这个（需与根目录同步）
 ├── install.sh             # Codex 一键安装脚本（macOS / Linux）
 ├── install.ps1            # Codex 一键安装脚本（Windows）
 ├── agents/
