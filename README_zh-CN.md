@@ -9,6 +9,46 @@ Research Guardrail 是一个面向 AI 辅助科研编程的 skill。它的目标
 
 [English README](README.md)
 
+## 一图速览
+
+这个 skill 如何把每一块工作——从一次性的数据变换到完整的论文复现——分流到合适的「人来掌握」程度，并挂上它需要的验证：
+
+```mermaid
+flowchart TD
+    T([科研 / 数据科学<br/>编程任务]) --> SIZE{任务有多大?}
+
+    SIZE -->|"轻量 & 机械<br/>(一次变换 · 一张图 · 一个修复)"| Q[直接做]
+    Q --> Z{是否触及<br/>静默 bug 区?}
+    Z -->|否| SHIP([交付])
+    Z -->|是| GATE
+
+    SIZE -->|"实质性工作<br/>(复现 · 新方法 ·<br/>流水线 · 教学)"| SPLIT[拆成模块]
+    SPLIT --> GRID{{"把每个模块放到两个维度上:<br/>学习价值 × 正确性风险"}}
+
+    GRID --> C1["高学习 · 低风险<br/>MANUAL CORE<br/>亲自掌握以理解"]
+    GRID --> C2["高学习 · 高风险<br/>MANUAL CORE + 验证"]
+    GRID --> C3["低学习 · 低风险<br/>AGENT-OWNED<br/>放心自动化"]
+    GRID --> C4["低学习 · 高风险<br/>AGENT-DRAFTED<br/>绝不盲信"]
+
+    C1 --> SHIP
+    C3 --> SHIP
+    C2 --> GATE
+    C4 --> GATE
+
+    GATE[["🔒 验证门<br/>一个具体、可运行、<br/>能抓出静默错误的检查"]] --> SHIP
+
+    classDef manual fill:#e6f0ff,stroke:#3b82f6,color:#1e3a8a;
+    classDef agent fill:#e8f7ee,stroke:#22c55e,color:#14532d;
+    classDef gate fill:#ffe3e3,stroke:#ef4444,color:#7f1d1d;
+    classDef plain fill:#f3f4f6,stroke:#6b7280,color:#111827;
+    class C1,C2 manual;
+    class C3,C4 agent;
+    class GATE gate;
+    class T,SHIP plain;
+```
+
+**配色含义：** 🟦 *manual core* 守护你的**理解**——亲手掌握值得拥有的部分；🟥 *验证门* 守护**结果**——给静默错误代码挂上可运行的检查，不可妥协；🟩 *agent-owned* 可以放心交给 agent 自动化。
+
 ## 安装
 
 ### Claude Code

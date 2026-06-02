@@ -9,6 +9,46 @@ It applies across research and data/scientific coding — machine learning, data
 
 [中文说明](README_zh-CN.md)
 
+## At a Glance
+
+How the skill routes each piece of work — from a one-off transform to a full paper reproduction — toward the right level of human ownership and the verification it needs:
+
+```mermaid
+flowchart TD
+    T([Research / data-science<br/>coding task]) --> SIZE{How big<br/>is the task?}
+
+    SIZE -->|"Quick & mechanical<br/>(one transform · a plot · a fix)"| Q[Just do it]
+    Q --> Z{Touches a<br/>silent-bug zone?}
+    Z -->|no| SHIP([Ship])
+    Z -->|yes| GATE
+
+    SIZE -->|"Substantial<br/>(reproduce · new method ·<br/>pipeline · teaching)"| SPLIT[Split into modules]
+    SPLIT --> GRID{{"Place each module on two axes:<br/>learning value × correctness risk"}}
+
+    GRID --> C1["High learning · Low risk<br/>MANUAL CORE<br/>own it to understand"]
+    GRID --> C2["High learning · High risk<br/>MANUAL CORE + verify"]
+    GRID --> C3["Low learning · Low risk<br/>AGENT-OWNED<br/>automate freely"]
+    GRID --> C4["Low learning · High risk<br/>AGENT-DRAFTED<br/>never trust blind"]
+
+    C1 --> SHIP
+    C3 --> SHIP
+    C2 --> GATE
+    C4 --> GATE
+
+    GATE[["🔒 VERIFICATION GATE<br/>a concrete, runnable check<br/>that catches the silent error"]] --> SHIP
+
+    classDef manual fill:#e6f0ff,stroke:#3b82f6,color:#1e3a8a;
+    classDef agent fill:#e8f7ee,stroke:#22c55e,color:#14532d;
+    classDef gate fill:#ffe3e3,stroke:#ef4444,color:#7f1d1d;
+    classDef plain fill:#f3f4f6,stroke:#6b7280,color:#111827;
+    class C1,C2 manual;
+    class C3,C4 agent;
+    class GATE gate;
+    class T,SHIP plain;
+```
+
+**Reading the colors:** 🟦 *manual core* preserves your **understanding** — you own the part worth owning; 🟥 the *verification gate* protects the **result** — a runnable check on silently-wrong code, non-negotiable; 🟩 *agent-owned* is safe to automate freely.
+
 ## Install
 
 ### Claude Code
