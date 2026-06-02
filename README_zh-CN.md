@@ -1,18 +1,44 @@
 # Happiness Skill
 
-Happiness 是一个面向 AI 辅助科研编程的 Codex skill。它的目标是让研究者使用 coding agent 提高效率，同时不丢掉真正形成理解、判断力和研究 ownership 的关键部分。
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-D97757)](https://claude.com/claude-code)
+[![Codex](https://img.shields.io/badge/Codex-skill-412991)](https://openai.com/codex)
+
+Happiness 是一个面向 AI 辅助科研编程的 skill。它的目标是让研究者用 coding agent 提效，同时不丢掉真正形成理解、判断力和研究 ownership 的关键部分——也不让看似合理、其实静默错误的代码悄悄污染科学结论。
+
+它针对观测天文学和数据流水线场景调优（astrometry、photometry、图像配准/叠加、源检测、星表匹配、FITS/WCS 处理），但整套工作流适用于任何科研编程。
 
 [English README](README.md)
 
 ## 它解决什么问题
 
-这个 skill 会在大规模生成代码之前，先把科研任务拆成三类：
+这个 skill 会在大规模生成代码之前，先加上一层科研 agency 护栏。它防范 AI 辅助科研出错的两种不同方式：
 
-- **agent-owned**：低价值、重复性、容易验证的工作，可以交给 agent 自动化。
-- **co-created**：agent 可以提供草案和选项，但研究者必须做判断。
-- **manual core**：研究者应该先亲自实现、推导、检查或决策的核心部分。
+- **失去理解**：agent 把有意思的部分做了，研究者没建立起直觉。
+- **失去信任**：agent 写了看似合理、其实静默错误的代码，结论被污染。
 
-它不是反自动化。它的原则是：自动化低价值痛苦，保留高价值摩擦。
+为同时应对这两点，它在写实质性代码之前，把每个模块按**两个维度**分类：
+
+- **学习价值**：亲手掌握它，能否建立研究直觉？
+- **正确性风险**：这里的静默 bug 会不会逃过 review、污染结果？
+
+|  | 低正确性风险 | 高正确性风险 |
+|---|---|---|
+| **高学习价值** | **manual core**——亲自掌握以理解 | **manual core + 硬验证**——既亲自做，*又*证明它是对的 |
+| **低学习价值** | **agent-owned**——放心自动化 | **agent-drafted + 验证门**——让 agent 写，但绝不盲信 |
+
+`co-created`（agent 提供选项、研究者做判断）仍然作为一个标签保留，用于那些既有一定启发性、又有后果的设计选择。
+
+它不是反自动化。原则是：自动化低价值痛苦，保留高价值摩擦，并给那些「看着没问题、其实静默错误」的危险代码挂上**验证门**。
+
+## 验证门（Verification Gate）
+
+对任何高风险代码（坐标约定、单位、时间系统、流量定标、重采样、星表匹配），skill 会附上一个具体、可运行、能抓出静默错误的检查——而不是一句「小心点」。例如：
+
+- **数组轴 vs 天球轴顺序**——在已知像素位置注入一个源，确认它落在预期的 `(x, y)` 和天球坐标上。
+- **像素索引起点**——对已知点做 `pix → world → pix` 往返，断言闭合到亚毫像素级。
+- **时间系统**——把一个已知时间戳来回转换，与独立参考比对。
+
+如果某段高风险代码说不出对应的验证门，skill 会明确指出——这本身就是警告。
 
 ## 什么时候使用
 
@@ -20,9 +46,11 @@ Happiness 是一个面向 AI 辅助科研编程的 Codex skill。它的目标是
 
 - 复现论文；
 - 开发新的科研方法；
+- 构建或调试分析流水线；
 - 训练实验室学生合理使用 coding agent；
-- 让 agent 实现科研代码；
-- 判断哪些部分适合自动化，哪些部分应该由研究者亲自掌握。
+- 判断哪些部分交给 agent 自动化、哪些应该亲手实现并验证。
+
+即使用户只是要一个「快速实现」，只要做错可能悄悄污染科学结果，也应触发它。
 
 ## 首次使用校准
 
@@ -34,9 +62,25 @@ Happiness 是一个面向 AI 辅助科研编程的 Codex skill。它的目标是
 4. 哪些部分可以让 agent 自由自动化；
 5. 当前优先级是学习训练、快速复现、新方法探索，还是生产级研究基础设施。
 
-回答会用于决定每个模块应该归为 agent-owned、co-created，还是 manual core。
+回答会调整这张网格——之前接触越少，manual core 和检查点越多；经验越强，agent-owned 和 co-created 的部分越多；无论哪种，危险代码上的验证门都保留。
+
+## Manual-core 交付方式
+
+默认情况下，skill 会交付**完整可用的实现 + 一份「理解账本」（understanding ledger）**——简短列出你「读代码而非亲手写」所跳过的洞见——而不是藏着代码不给。Scaffold-only 模式（只给函数签名 + 待填 TODO，由你实现核心）作为备选，在明确的学习/训练场景下默认采用。
 
 ## 安装
+
+### Claude Code
+
+作为个人 skill，克隆到你的 skills 目录：
+
+```bash
+git clone https://github.com/carryons6/happiness-skill.git ~/.claude/skills/happiness
+```
+
+或作为项目 skill，把它放到仓库的 `.claude/skills/happiness/` 下。Claude Code 会根据 `SKILL.md` 的 frontmatter 自动发现这个 skill。
+
+### Codex
 
 推荐方式：在 Codex 里使用内置的 skill installer 安装。
 
@@ -68,10 +112,10 @@ git clone git@github.com:carryons6/happiness-skill.git ~/.codex/skills/happiness
 可以显式调用：
 
 ```text
-Use $happiness to plan how I should reproduce this paper with a coding agent.
+Use the happiness skill to plan how I should reproduce this paper with a coding agent.
 ```
 
-也可以让 Codex 根据 skill 描述自动触发，例如在论文复现、新方法开发、学生训练等任务中触发。
+也可以让 agent 根据 skill 描述自动触发，例如在论文复现、新方法开发、流水线构建、学生训练等任务中触发。
 
 ## 仓库结构
 
